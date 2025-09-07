@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Currículo Profissional — Gerador Renova DF</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --renova-azul:#0b5394;
+    --renova-verde:#22b14c;
+    --bg:#f0f4f8;
+    --card:#ffffff;
+    --ink:#111827;
+    --muted:#334155;
+    --line:#e5e7eb;
+    --accent:#0b5394;
+    --accent2:#22b14c;
+    --shadow:0 10px 30px rgba(2,6,23,.10);
+  }
+  .dark{
+    --bg:#111827;
+    --card:#1f2937;
+    --ink:#f9fafb;
+    --muted:#cbd5e1;
+    --line:#334155;
+    --accent:#4ea3ff;
+    --accent2:#34d399;
+    --shadow:0 14px 38px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%; margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 20% -10%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 60%),
+      radial-gradient(1200px 600px at 110% 10%, color-mix(in oklab, var(--accent2) 14%, transparent), transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    transition: background .3s ease, color .3s ease;
+  }
+
+  /* Toolbar com identidade Renova */
+  .toolbar{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; gap:.6rem; padding:.8rem 1rem;
+    border-bottom:1px solid var(--line); backdrop-filter: blur(8px);
+    background: color-mix(in oklab, var(--bg) 82%, transparent);
+  }
+  .brand{display:flex; align-items:center; gap:.6rem; margin-right:auto;}
+  .brand img{height:34px; border-radius:6px;}
+  .brand .t{font-weight:800; letter-spacing:.2px;}
+  .btn{
+    border:none; border-radius:999px; padding:.65rem 1rem; font-weight:700; cursor:pointer;
+    color:#fff; background:linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow:0 8px 22px rgba(11,83,148,.25); transition:.15s ease;
+  }
+  .btn:hover{ transform: translateY(-1px);}
+  .btn.ghost{ background:var(--card); color:var(--ink); border:1px solid var(--line); box-shadow:var(--shadow); }
+
+  .layout{max-width:1200px; margin:22px auto; padding:0 16px; display:grid; grid-template-columns:450px 1fr; gap:18px;}
+  @media (max-width:1100px){.layout{grid-template-columns:1fr;}}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); overflow:hidden;}
+  .card h2{margin:0; padding:14px 16px; background:linear-gradient(135deg, color-mix(in oklab, var(--accent) 26%, transparent), color-mix(in oklab, var(--accent2) 26%, transparent)); color:#fff; font-size:16px; letter-spacing:.08em; text-transform:uppercase;}
+  .card .content{padding:16px;}
+
+  /* Form */
+  .field{ margin-bottom:12px; }
+  .field label{ display:flex; justify-content:space-between; align-items:center; font-weight:700; margin-bottom:6px; gap:8px; }
+  .field small{ color:var(--muted); font-weight:600; }
+  .control{ display:flex; gap:8px; align-items:stretch; }
+  .control input, .control textarea{
+    width:100%; border:1px solid var(--line); border-radius:12px; padding:.7rem .9rem;
+    background:var(--card); color:var(--ink); outline:none; box-shadow:inset 0 0 0 1px transparent; transition:.15s ease;
+  }
+  .control textarea{ min-height:92px; resize:vertical; }
+  .mic{ min-width:44px; border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:12px; cursor:pointer; font-weight:800; padding:.5rem .7rem; box-shadow:var(--shadow);}
+  .mic.live{ outline:2px solid var(--accent); color:var(--accent); }
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:620px){ .row{ grid-template-columns:1fr; } }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip, .tag{ display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:#f8fafc; padding:.28rem .52rem; border-radius:999px; font-size:12px; font-weight:700; color:#0b1b2b; }
+  .section-line{ margin:16px 0; border-top:1px dashed var(--line); }
+  .adder{ display:flex; gap:8px; flex-wrap:wrap; }
+  .add-btn{ border:1px dashed var(--line); background:var(--card); color:var(--ink); border-radius:10px; padding:.5rem .8rem; font-weight:700; cursor:pointer; }
+  .del-btn{ border:none; background:#ef4444; color:#fff; border-radius:10px; padding:.4rem .6rem; cursor:pointer; }
+
+  /* Preview do currículo */
+  .preview-wrap{position:relative;}
+  .cvPage{
+    width:210mm; min-height:297mm; margin:0 auto; background:#fff;
+    border-radius:18px; box-shadow:var(--shadow); overflow:hidden; border:1px solid var(--line);
+    display:grid; grid-template-rows:auto 1fr auto; font-family:Inter, sans-serif;
+  }
+
+  /* Modelos Profissionais */
+  .cv-header{
+    display:flex; gap:16px; align-items:center; padding:24px; background:#fdfdfd;
+  }
+  .cv-header .avatar{
+    width:140px; height:140px; border-radius:50%; overflow:hidden; flex-shrink:0;
+    background:linear-gradient(135deg, #0b5394, #22b14c);
+    box-shadow:0 8px 22px rgba(0,0,0,.18);
+  }
+  .cv-header .avatar img{ width:100%; height:100%; object-fit:cover; border-radius:50%; }
+  .cv-header .idblock{ flex:1; display:flex; flex-direction:column; justify-content:center; }
+  .cv-header .idblock h1{ margin:0; font-size:28px; font-weight:800; }
+  .cv-header .idblock .role{ font-size:16px; color:#0b1b2b; margin-top:4px; font-weight:600; }
+  .cv-header .idblock .links{ margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; font-size:12px; }
+  .cv-header .idblock .links .link{ background:#f3f4f6; padding:.2rem .5rem; border-radius:999px; color:#111827; }
+
+  .cv-body{padding:16px 24px; display:grid; gap:16px;}
+  .sec{ padding:14px; border:1px solid #e5e7eb; border-radius:12px; background:#fff; }
+  .sec h3{ font-size:13px; color:#475569; text-transform:uppercase; margin-bottom:8px; letter-spacing:.08em; }
+  .item{ margin-bottom:10px; }
+  .xp-title{ font-weight:700; font-size:14px; color:#111827; }
+  .xp-meta{ font-size:12px; color:#64748b; margin-bottom:6px; }
+  .xp-ul{ margin:0; padding-left:16px; list-style-type:disc; }
+  .cv-footer{padding:10px 24px; border-top:1px dashed #e5e7eb; font-size:12px; color:#64748b; text-align:right;}
+
+  @media print{
+    body{ background:#fff !important; }
+    .toolbar, .form-card{ display:none !important; }
+    .cvPage{ box-shadow:none; border:none; border-radius:0; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Toolbar -->
+<div class="toolbar">
+  <div class="brand">
+    <img src="https://opiniaobrasilia.com.br/wp-content/uploads/2020/12/RenovaDF.jpeg" alt="Renova DF">
+    <div class="t">Renova DF — Gerador de Currículo</div>
+  </div>
+  <button class="btn" onclick="downloadPDF()">Baixar PDF</button>
+</div>
+
+<div class="layout">
+
+  <!-- Formulário -->
+  <div class="card form-card">
+    <h2>Preencha seu Currículo</h2>
+    <div class="content">
+
+      <div class="field">
+        <label>Nome <small>(ou diga em voz alta)</small> <button class="mic" onclick="speakField('nome')">🎤</button></label>
+        <input type="text" id="nome" value="Marcelo Guimarães">
+      </div>
+      <div class="field">
+        <label>Cargo / Função <small>(ou diga)</small> <button class="mic" onclick="speakField('cargo')">🎤</button></label>
+        <input type="text" id="cargo" value="Engenheiro de Software">
+      </div>
+      <div class="field">
+        <label>Foto <small>(URL ou arraste)</small></label>
+        <input type="text" id="foto" value="https://randomuser.me/api/portraits/men/45.jpg">
+      </div>
+
+      <div class="field">
+        <label>Resumo Profissional</label>
+        <textarea id="resumo">Profissional com mais de 10 anos de experiência em desenvolvimento de softwares escaláveis, liderança de equipes e otimização de processos.</textarea>
+      </div>
+
+      <div class="field row">
+        <div>
+          <label>Formação</label>
+          <textarea id="formacao">Mestrado em Engenharia de Software — USP (2015-2017)
+Bacharel em Ciência da Computação — UnB (2009-2013)</textarea>
+        </div>
+        <div>
+          <label>Idiomas <button class="add-btn" onclick="addField('idiomas')">Adicionar</button></label>
+          <div id="idiomas" class="chips">
+            <span class="chip">Português</span>
+            <span class="chip">Inglês — Avançado</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Experiência <button class="add-btn" onclick="addField('experiencia')">Adicionar</button></label>
+        <div id="experiencia" class="chips">
+          <span class="chip">Google — Engenheiro de Software (2018-2025)</span>
+          <span class="chip">IBM — Desenvolvedor Sênior (2013-2018)</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Certificados <button class="add-btn" onclick="addField('certificados')">Adicionar</button></label>
+        <div id="certificados" class="chips">
+          <span class="chip">AWS Certified Solutions Architect</span>
+          <span class="chip">Scrum Master</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Habilidades <button class="add-btn" onclick="addField('habilidades')">Adicionar</button></label>
+        <div id="habilidades" class="chips">
+          <span class="chip">JavaScript</span>
+          <span class="chip">Python</span>
+          <span class="chip">Node.js</span>
+          <span class="chip">React</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Preview do Currículo -->
+  <div class="preview-wrap">
+    <div class="cvPage" id="cvPreview">
+      <div class="cv-header">
+        <div class="avatar"><img id="cvFoto" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Foto"></div>
+        <div class="idblock">
+          <h1 id="cvNome">Marcelo Guimarães</h1>
+          <div class="role" id="cvCargo">Engenheiro de Software</div>
+          <div class="links">
+            <span class="link">marcelo@email.com</span>
+            <span class="link">+55 61 99999-9999</span>
+            <span class="link">www.linkedin.com/marcelo</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cv-body">
+        <div class="sec">
+          <h3>Resumo</h3>
+          <p id="cvResumo">Profissional com mais de 10 anos de experiência em desenvolvimento de softwares escaláveis, liderança de equipes e otimização de processos.</p>
+        </div>
+
+        <div class="sec">
+          <h3>Formação</h3>
+          <div id="cvFormacao">
+            <div class="item">Mestrado em Engenharia de Software — USP (2015-2017)</div>
+            <div class="item">Bacharel em Ciência da Computação — UnB (2009-2013)</div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <h3>Experiência</h3>
+          <div id="cvExperiencia">
+            <div class="item"><span class="xp-title">Google — Engenheiro de Software</span> <div class="xp-meta">(2018-2025)</div></div>
+            <div class="item"><span class="xp-title">IBM — Desenvolvedor Sênior</span> <div class="xp-meta">(2013-2018)</div></div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <h3>Idiomas</h3>
+          <div id="cvIdiomas">
+            <span class="chip">Português</span>
+            <span class="chip">Inglês — Avançado</span>
+          </div>
+        </div>
+
+        <div class="sec">
+          <h3>Certificados</h3>
+          <div id="cvCertificados">
+            <span class="chip">AWS Certified Solutions Architect</span>
+            <span class="chip">Scrum Master</span>
+          </div>
+        </div>
+
+        <div class="sec">
+          <h3>Habilidades</h3>
+          <div id="cvHabilidades">
+            <span class="chip">JavaScript</span>
+            <span class="chip">Python</span>
+            <span class="chip">Node.js</span>
+            <span class="chip">React</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cv-footer">Currículo gerado automaticamente • Renova DF</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.11.0/html2pdf.bundle.min.js"></script>
+<script>
+
+function speakField(fieldId){
+  const text = document.getElementById(fieldId).value;
+  const utter = new SpeechSynthesisUtterance(text);
+  speechSynthesis.speak(utter);
+}
+
+// Atualiza preview ao digitar
+const fields = ['nome','cargo','resumo','formacao','foto'];
+fields.forEach(f => document.getElementById(f).addEventListener('input', updateCV));
+
+function updateCV(){
+  document.getElementById('cvNome').innerText = document.getElementById('nome').value;
+  document.getElementById('cvCargo').innerText = document.getElementById('cargo').value;
+  document.getElementById('cvResumo').innerText = document.getElementById('resumo').value;
+  document.getElementById('cvFormacao').innerHTML = document.getElementById('formacao').value.replace(/\n/g,'<div class="item">$&</div>');
+  document.getElementById('cvFoto').src = document.getElementById('foto').value;
+}
+
+// Funções para adicionar campos dinâmicos
+function addField(section){
+  const name = prompt("Digite o novo item:");
+  if(name){
+    const chip = document.createElement('span');
+    chip.className = 'chip';
+    chip.innerText = name;
+    document.getElementById(section).appendChild(chip);
+
+    // Atualiza CV
+    const cvSectionMap = {
+      'idiomas':'cvIdiomas',
+      'experiencia':'cvExperiencia',
+      'certificados':'cvCertificados',
+      'habilidades':'cvHabilidades'
+    };
+    const newChip = chip.cloneNode(true);
+    document.getElementById(cvSectionMap[section]).appendChild(newChip);
+  }
+}
+
+// Gerar PDF apenas do currículo
+function downloadPDF(){
+  const element = document.getElementById('cvPreview');
+  const opt = {
+    margin:       0.5,
+    filename:     'curriculo.pdf',
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { scale: 2 },
+    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(element).save();
+}
+
+</script>
+
+</body>
+</html>
