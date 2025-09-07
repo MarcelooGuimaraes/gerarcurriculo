@@ -11,47 +11,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
 
 <!-- html2pdf (CDN) para exportar PDF estilizado -->
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
+  /* ---------- Página (com identidade Renova) ---------- */
   :root{
     --renova-blue:#0b5394;
     --renova-green:#22b14c;
     --page-bg:#f3f6fa;
     --muted:#5b6b7a;
     --cv-pad:18px;
-    --surface:#ffffff;
-    --radius:12px;
-    --shadow:0 10px 30px rgba(2,6,23,.06);
-    --gap:14px;
-    --max-width:1100px;
-    --touch:44px; /* minimum tappable area */
   }
-
   *{box-sizing:border-box}
-  html,body{height:100%}
-  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial; margin:0; background:var(--page-bg); color:#0b1b2b; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial; margin:0; background:var(--page-bg); color:#0b1b2b; -webkit-font-smoothing:antialiased;}
 
-  /* Header */
-  header.sitebar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:linear-gradient(135deg,var(--renova-blue),var(--renova-green));color:white;box-shadow:0 4px 18px rgba(2,6,23,.12);position:sticky;top:0;z-index:40}
-  header.sitebar img.logo{height:40px;border-radius:6px;flex-shrink:0}
-  header.sitebar h1{font-size:1rem;letter-spacing:.6px;margin:0;font-weight:700}
+  /* Dark mode variables (applied when body.dark is present) */
+  body.dark{ background:#0b1116; color:#dfe8ef }
+  body.dark header.sitebar{ filter:brightness(.95) }
+
+  header.sitebar{display:flex;align-items:center;gap:14px;padding:14px 20px;background:linear-gradient(135deg,var(--renova-blue),var(--renova-green));color:white;box-shadow:0 4px 18px rgba(2,6,23,.12);}
+  header.sitebar img.logo{height:40px;border-radius:6px}
+  header.sitebar h1{font-size:1.05rem;letter-spacing:.6px;margin:0;font-weight:700}
   .top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
-  .btn{border:0;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;background:transparent}
-  .btn.ghost{background:rgba(255,255,255,0.12);color:white;border:1px solid rgba(255,255,255,0.12)}
+  .btn{border:0;padding:10px 12px;border-radius:10px;font-weight:700;cursor:pointer}
+  .btn.ghost{background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.12)}
+  .container{max-width:1200px;margin:22px auto;display:grid;grid-template-columns:360px 1fr;gap:18px;padding:0 16px}
+  @media(max-width:980px){.container{grid-template-columns:1fr}}
 
-  /* layout */
-  .container{max-width:var(--max-width);margin:18px auto;display:grid;grid-template-columns:320px 1fr;gap:18px;padding:0 16px}
-  @media (max-width:1000px){ .container{ grid-template-columns:1fr } }
-
-  /* panels */
-  .panel{background:var(--surface);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);}
-  .panel h2{font-family:Merriweather,serif;margin:0 0 10px;font-size:1.05rem}
+  /* ---------- Painel do formulário (preservado) ---------- */
+  .panel{background:white;border-radius:12px;padding:14px;box-shadow:0 10px 30px rgba(2,6,23,.06)}
+  .panel h2{font-family:Merriweather,serif;margin:0 0 10px;font-size:1.1rem}
   label.field{display:block;margin-top:10px;font-size:0.95rem}
   input[type="text"], input[type="email"], input[type="tel"], textarea, input[type="url"]{
-    width:100%;padding:10px;border-radius:8px;border:1px solid #d5dbe3;margin-top:6px;font-size:0.95rem;background:transparent
+    width:100%;padding:10px;border-radius:8px;border:1px solid #d5dbe3;margin-top:6px;font-size:0.95rem;background:transparent;color:inherit
   }
-  textarea{min-height:88px;resize:vertical}
+  textarea{min-height:80px;resize:vertical}
   .row{display:flex;gap:8px}
   .small{font-size:0.85rem;color:var(--muted)}
   .control-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
@@ -59,80 +53,89 @@
   .kbtn.secondary{background:#eef3fb;color:var(--renova-blue);border:1px solid #d7e3f3}
   .mic{background:#ef4444;color:#fff;border:0;padding:6px 8px;border-radius:8px;cursor:pointer}
   .listen{background:#111;color:#fff;padding:6px 8px;border-radius:8px;border:0;cursor:pointer}
+
+  .section-ops{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .section-ops .title{font-weight:700}
   .remove-section{background:#d33;color:#fff;border:0;padding:6px 8px;border-radius:8px;cursor:pointer}
+
+  /* dynamic blocks */
   .dynamic-block{border:1px solid #eef3f6;padding:10px;border-radius:10px;margin-top:10px;background:#fcfeff}
+  .dynamic-block .row{margin-top:8px}
   .remove-item{background:#f97316;color:#fff;border:0;padding:6px 8px;border-radius:8px;cursor:pointer}
 
-  /* preview */
+  /* ---------- Preview / CV (ajustado) ---------- */
   .preview-wrap{padding:12px}
-  .preview{background:var(--surface);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);}
-  #cvPreview{ width:100%; box-sizing:border-box; font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial; color:#0b1b2b }
+  .preview{background:white;border-radius:12px;padding:18px;box-shadow:0 10px 40px rgba(2,6,23,.06);}
 
-  /* top */
-  #cvPreview .cv-top{ display:flex; gap:20px; align-items:center; padding-bottom:12px; border-bottom:2px solid #eef2f6 }
+  /* ---------- CV Preview Melhorado (base para os templates) ---------- */
+  #cvPreview{ width:100%; box-sizing:border-box; font-family:Inter,system-ui, -apple-system, 'Segoe UI', Roboto, Arial; color:#0b1b2b; }
+
+  /* Top */
+  #cvPreview .cv-top{ display:flex; gap:20px; align-items:center; padding-bottom:12px; border-bottom:2px solid #eef2f6; }
   #cvPreview .cv-photo{ width:150px; height:150px; border-radius:50%; object-fit:cover; border:5px solid #ffffff; box-shadow:0 8px 26px rgba(2,6,23,.12); background:linear-gradient(135deg,#e6eefb,#e9fbef); flex-shrink:0 }
   #cvPreview .cv-name{ font-family:Merriweather,serif; font-size:2.1rem; margin:0; line-height:1; font-weight:800; color:#0b3b66 }
-  #cvPreview .cv-role{ color:var(--renova-blue); font-weight:700; margin-top:6px; font-size:1.05rem }
-  #cvPreview .cv-contacts{ margin-top:10px; color:var(--muted); font-size:0.95rem; display:flex; gap:12px; flex-wrap:wrap }
+  #cvPreview .cv-role{ color:var(--renova-blue); font-weight:700; margin-top:6px; font-size:1.05rem; }
+
+  #cvPreview .cv-contacts{ margin-top:10px; color:var(--muted); font-size:0.95rem; display:flex; gap:12px; flex-wrap:wrap; }
 
   /* grid content */
-  #cvPreview .cv-grid{ display:grid; grid-template-columns: 2fr 1fr; gap:22px; margin-top:18px; align-items:start }
-  #cvPreview .cv-section{ margin-bottom:14px }
-  #cvPreview .cv-section h3{ margin:0 0 8px 0; font-size:0.95rem; color:#0b3b66; letter-spacing:.06em; text-transform:uppercase; background:linear-gradient(90deg, rgba(11,83,148,0.04), transparent); padding:8px 10px; border-radius:6px; border-bottom:2px solid #e6eefb }
-  #cvPreview .cv-section p, #cvPreview .cv-section li{ font-size:0.95rem; color:#1e2937; line-height:1.45; margin:6px 0 }
-  #cvPreview .xp-meta{ font-size:0.88rem; color:#64748b; margin-top:4px }
-  #cvPreview .xp-title{ font-weight:700; font-size:1rem; color:#0b1b2b }
-  .tag{ display:inline-block; padding:6px 12px; border-radius:999px; color:white; font-weight:700; margin:6px 6px 6px 0; background:linear-gradient(90deg,var(--renova-blue),var(--renova-green)); font-size:0.85rem }
+  #cvPreview .cv-grid{ display:grid; grid-template-columns: 2fr 1fr; gap:22px; margin-top:18px; align-items:start; }
 
-  /* Template variants */
-  #cvPreview.template-2 .cv-top{ flex-direction:column; align-items:center; text-align:center; border-bottom:2px solid #f3f4f6 }
-  #cvPreview.template-2 .cv-grid{ grid-template-columns: 1fr; margin-top:14px }
-  #cvPreview.template-3{ display:grid; grid-template-columns: 280px 1fr; gap:0; align-items:start; width:100% }
-  #cvPreview.template-3 .sidebar{ background:linear-gradient(180deg,var(--renova-blue),var(--renova-green)); color:white; padding:26px; min-height:100%; box-sizing:border-box }
-  #cvPreview.template-3 .sidebar .cv-photo{ width:140px; height:140px; border:4px solid rgba(255,255,255,0.18); background:transparent }
-  #cvPreview.template-3 .main{ padding:26px }
+  /* sections */
+  #cvPreview .cv-section{ margin-bottom:14px; }
+  #cvPreview .cv-section h3{ margin:0 0 8px 0; font-size:0.95rem; color:#0b3b66; letter-spacing:.06em; text-transform:uppercase; background:linear-gradient(90deg, rgba(11,83,148,0.04), transparent); padding:8px 10px; border-radius:6px; border-bottom:2px solid #e6eefb; }
+  #cvPreview .cv-section p, #cvPreview .cv-section li{ font-size:0.95rem; color:#1e2937; line-height:1.45; margin:6px 0; }
+  #cvPreview .xp-meta{ font-size:0.88rem; color:#64748b; margin-top:4px; }
+  #cvPreview .xp-title{ font-weight:700; font-size:1rem; color:#0b1b2b; }
 
-  /* images */
+  /* tags */
+  #cvPreview .tag{ display:inline-block; padding:6px 12px; border-radius:999px; color:white; font-weight:700; margin:6px 6px 6px 0; background:linear-gradient(90deg,var(--renova-blue),var(--renova-green)); font-size:0.85rem; }
+
+  /* Template: Classic = template-1 (default) */
+  #cvPreview.template-1 .cv-top{border-color:#e6eefb;}
+  #cvPreview.template-1 .cv-photo{border-color:#ffffff;}
+
+  /* Template: Minimal (centered header) */
+  #cvPreview.template-2 .cv-top{ flex-direction:column; align-items:center; text-align:center; border-bottom:2px solid #f3f4f6; }
+  #cvPreview.template-2 .cv-grid{ grid-template-columns: 1fr; margin-top:14px; }
+  #cvPreview.template-2 .cv-section h3{ background:transparent; border-bottom:1px solid #eef2f6; padding:0 0 8px 0; text-align:left; }
+
+  /* Template: Creative (sidebar) - FIXED layout to avoid overflow */
+  #cvPreview.template-3{ display:grid; grid-template-columns: 280px 1fr; gap:0; align-items:start; width:100%; }
+  #cvPreview.template-3 .sidebar{ background:linear-gradient(180deg,var(--renova-blue),var(--renova-green)); color:white; padding:26px; min-height:100%; box-sizing:border-box; }
+  #cvPreview.template-3 .sidebar .cv-photo{ width:140px; height:140px; border:4px solid rgba(255,255,255,0.18); background:transparent; object-fit:cover }
+  #cvPreview.template-3 .main{ padding:26px; }
+
+  /* ensure images and content don't overflow preview area */
   .preview img{ max-width:100%; height:auto; display:block }
-  #cvPreview{ max-width:100% }
+  #cvPreview{ max-width:100%; }
 
-  /* print tweaks */
+  /* print tweaks - ensure page fits A4 */
   @media print{
     body{background:white}
     header.sitebar,.panel{display:none}
     .preview{box-shadow:none}
-    #cvPreview{ width:210mm; box-sizing:border-box; padding:var(--cv-pad) }
-    #cvPreview .cv-photo{ width:160px; height:160px }
-    #cvPreview.template-3{ display:block }
+    #cvPreview{ width:210mm; box-sizing:border-box; padding:var(--cv-pad); }
+    #cvPreview .cv-photo{ width:160px; height:160px; }
+    #cvPreview.template-3{ display:block } /* fallback */
   }
 
-  /* small screens / mobile polish */
-  @media (max-width:780px){
-    :root{ --max-width:1000px }
-    header.sitebar{padding:10px}
-    header.sitebar h1{font-size:0.95rem}
-    .panel{padding:12px}
-    .kbtn, .kbtn.secondary, .mic, .listen, .remove-section, .remove-item{ padding:10px; min-height:var(--touch); }
-    .container{ padding:0 12px }
-    #cvPreview .cv-photo{ width:110px; height:110px }
-    #cvPreview .cv-name{ font-size:1.6rem }
-    #cvPreview .cv-grid{ grid-template-columns: 1fr }
-    #cvPreview.template-3{ display:block } /* convert sidebar to stacked for small screens */
+  /* small screens */
+  @media(max-width:780px){
+    #cvPreview .cv-photo{ width:110px; height:110px; }
+    #cvPreview .cv-name{ font-size:1.4rem; }
+    .container{ grid-template-columns: 1fr; }
+    #cvPreview.template-3{ display:block }
     #cvPreview.template-3 .sidebar{ padding:16px }
     #cvPreview.template-3 .main{ padding:16px }
   }
-
-  /* reduced motion */
-  @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
-
-  /* focus states (accessibility) */
-  :focus{outline:3px solid rgba(11,83,148,0.16);outline-offset:3px}
 </style>
 </head>
 <body>
 
+<!-- HEADER com identidade Renova (presente na página, mas NÃO no currículo exportado) -->
 <header class="sitebar" role="banner" aria-label="Barra superior Renova">
-  <img class="logo" src="https://opiniaobrasilia.com.br/wp-content/uploads/2020/12/RenovaDF.jpeg" alt="Renova DF" loading="lazy">
+  <img class="logo" src="https://opiniaobrasilia.com.br/wp-content/uploads/2020/12/RenovaDF.jpeg" alt="Renova DF">
   <h1>Renova DF — Gerador de Currículos</h1>
   <div class="top-actions" role="navigation" aria-label="Ações principais">
     <button class="btn ghost" id="themeToggle" title="Alternar tema">Tema</button>
@@ -140,7 +143,10 @@
   </div>
 </header>
 
+<!-- LAYOUT -->
 <div class="container" role="main">
+
+  <!-- Painel esquerdo: formulário -->
   <aside class="panel" aria-label="Formulário de preenchimento">
     <h2>Dados do candidato</h2>
 
@@ -196,15 +202,18 @@
       <div class="small">Adicione ou remova seções inteiras</div>
     </div>
 
-    <div class="control-actions" style="margin-top:8px;">
+    <!-- Buttons para adicionar seções -->
+    <div class="control-actions" aria-hidden="false" style="margin-top:8px;">
       <button class="kbtn secondary" onclick="addSection('experience')" id="addExpBtn">+ Experiência</button>
       <button class="kbtn secondary" onclick="addSection('education')" id="addEduBtn">+ Formação</button>
       <button class="kbtn secondary" onclick="addSection('certs')" id="addCertBtn">+ Certificações</button>
       <button class="kbtn secondary" onclick="addSection('langs')" id="addLangBtn">+ Idiomas</button>
     </div>
 
+    <!-- Contêineres dinâmicos de seções (os itens são adicionados dentro destes) -->
     <div id="sectionsArea" style="margin-top:14px"></div>
 
+    <!-- Template selector -->
     <div style="margin-top:14px">
       <label class="field">Modelo de currículo
         <select id="templateSelect" aria-label="Selecionar modelo de currículo">
@@ -224,6 +233,7 @@
     <p class="small" style="margin-top:12px">Dica: use 🎤 para ditar. Para exportar, clique em "Exportar PDF". A exportação inclui somente o currículo (sem header Renova).</p>
   </aside>
 
+  <!-- Painel direito: preview (o currículo em si) -->
   <main class="preview-wrap" aria-label="Pré-visualização do currículo">
     <div id="cvPreview" class="preview template-1" role="region" aria-live="polite" aria-label="Visualização do currículo">
       <div id="cvContent" style="padding:18px">
@@ -234,24 +244,20 @@
 </div>
 
 <script>
-/* feature-detect helpers */
-const supportsSpeech = ('webkitSpeechRecognition' in window) || ('SpeechRecognition' in window);
-const SpeechRec = window.webkitSpeechRecognition || window.SpeechRecognition || null;
-
+/* ---------- Voz: leitura + ditado ---------- */
 function speakField(id, hint){
   const v = (document.getElementById(id)?.value) || hint || '';
-  if(!v) return;
   const u = new SpeechSynthesisUtterance(v);
   u.lang='pt-BR';
   window.speechSynthesis.speak(u);
 }
-
 function startDictationFor(id){
-  if(!SpeechRec){
-    alert('Reconhecimento de voz não suportado neste navegador. Use Chrome/Edge em desktop ou Android.');
+  if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){
+    alert('Reconhecimento de voz não suportado neste navegador. Use Chrome/Edge.');
     return;
   }
-  const recognition = new SpeechRec();
+  const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
+  const recognition = new Rec();
   recognition.lang = 'pt-BR';
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
@@ -267,7 +273,7 @@ function startDictationFor(id){
   };
 }
 
-/* dynamic sections */
+/* ---------- Dinâmica de seções ---------- */
 const sectionsArea = document.getElementById('sectionsArea');
 const sectionsState = { experience:false, education:false, certs:false, langs:false };
 
@@ -356,9 +362,11 @@ function addItemToSection(name){
   rebuildPreview();
 }
 
+/* ---------- block-level speech helpers ---------- */
 function startDictationForBlock(blockId){
-  if(!SpeechRec){ alert('Reconhecimento de voz não suportado.'); return; }
-  const rec = new SpeechRec();
+  if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){ alert('Reconhecimento de voz não suportado.'); return; }
+  const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
+  const rec = new Rec();
   rec.lang='pt-BR'; rec.interimResults=false; rec.maxAlternatives=1;
   rec.start();
   rec.onresult = (ev) => {
@@ -381,7 +389,7 @@ function speakBlock(blockId){
   u.lang='pt-BR'; speechSynthesis.speak(u);
 }
 
-/* photo handling */
+/* ---------- photo handling ---------- */
 let photoDataUrl = '';
 document.getElementById('photoInput').addEventListener('change', (e)=>{
   const f = e.target.files?.[0];
@@ -391,7 +399,7 @@ document.getElementById('photoInput').addEventListener('change', (e)=>{
   reader.readAsDataURL(f);
 });
 
-/* template switching */
+/* ---------- template switching ---------- */
 document.getElementById('templateSelect').addEventListener('change', (e)=>{
   const t = e.target.value;
   const preview = document.getElementById('cvPreview');
@@ -400,7 +408,7 @@ document.getElementById('templateSelect').addEventListener('change', (e)=>{
   rebuildPreview();
 });
 
-/* clear / example / update */
+/* ---------- clear / example / update ---------- */
 document.getElementById('updateBtn').addEventListener('click', rebuildPreview);
 document.getElementById('clearBtn').addEventListener('click', ()=>{
   if(!confirm('Limpar todos os campos e seções?')) return;
@@ -414,7 +422,7 @@ document.getElementById('clearBtn').addEventListener('click', ()=>{
 });
 document.getElementById('loadExampleBtn').addEventListener('click', loadExample);
 
-/* render */
+/* ---------- build preview: core rendering logic ---------- */
 function rebuildPreview(){
   const name = document.getElementById('nameInput').value.trim() || 'Nome Completo';
   const role = document.getElementById('roleInput').value.trim() || 'Cargo / Área';
@@ -432,9 +440,10 @@ function rebuildPreview(){
   let html = '';
 
   if(activeTemplate === 'template-3'){
+    // creative sidebar
     html = `
       <div class="sidebar" aria-hidden="true">
-        <div style="display:flex;justify-content:center;"><img class="cv-photo" src="${photoDataUrl||'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\"></svg>'}" alt="Foto do candidato"></div>
+        <div style="display:flex;justify-content:center;"><img class="cv-photo" src="${photoDataUrl||''}" alt=""></div>
         <div style="text-align:center;margin-top:8px;font-weight:800;color:white">${escapeHtml(name)}</div>
         <div style="text-align:center;color:rgba(255,255,255,0.9);margin-bottom:12px">${escapeHtml(role)}</div>
         <div style="color:rgba(255,255,255,0.95);font-size:0.95rem;line-height:1.4">
@@ -452,9 +461,10 @@ function rebuildPreview(){
       </div>
     `;
   } else {
+    // template 1 & 2: top left photo
     html = `
       <div class="cv-top">
-        <img class="cv-photo" src="${photoDataUrl||'data:image/svg+xml;utf8,<svg xmlns=\\"http://www.w3.org/2000/svg\\" width=\\"400\\" height=\\"400\\"></svg>'}" alt="Foto do candidato">
+        <img class="cv-photo" src="${photoDataUrl||''}" alt="">
         <div>
           <h1 class="cv-name">${escapeHtml(name)}</h1>
           <div class="cv-role">${escapeHtml(role)}</div>
@@ -481,6 +491,7 @@ function rebuildPreview(){
   preview.innerHTML = html;
 }
 
+/* helper: renderSectionHtml reads the DOM inputs for that section and returns rendered HTML */
 function renderSectionHtml(section){
   if(!sectionsState[section]) return '';
   const container = document.getElementById(section+'-items');
@@ -539,41 +550,53 @@ function escapeHtml(s){
   return (s||'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;');
 }
 
-/* export to pdf */
-document.getElementById('exportPDF').addEventListener('click', async ()=>{
+/* ---------- Export to PDF (isolar apenas o currículo) ---------- */
+function exportCurriculumAsPDF(){
+  // ensure html2pdf is available
+  if(typeof html2pdf === 'undefined'){
+    alert('Ainda carregando a biblioteca de exportação. Tente novamente em alguns segundos.');
+    return;
+  }
+
   const el = document.getElementById('cvPreview');
+  // clone and prepare
   const clone = el.cloneNode(true);
+  // remove interactive elements inside clone
   clone.querySelectorAll('button, input, textarea, select').forEach(n=>n.remove());
+
+  // force light mode in clone for consistent print (optional)
+  clone.classList.remove('dark');
 
   const wrapper = document.createElement('div');
   wrapper.style.background = '#fff';
   wrapper.style.padding = '0';
   wrapper.style.margin = '0 auto';
-  wrapper.style.width = '210mm';
+  wrapper.style.width = '210mm'; // A4 width
   wrapper.style.boxSizing = 'border-box';
   wrapper.appendChild(clone);
   document.body.appendChild(wrapper);
 
   const filename = `${(document.getElementById('nameInput').value||'curriculo').replaceAll(' ','_')}.pdf`;
   const opt = {
-    margin:       [10,10,10,10],
+    margin:       [10,10,10,10], // mm
     filename,
     image:        { type: 'jpeg', quality: 0.98 },
     html2canvas:  { scale: 2, useCORS: true, allowTaint: true },
     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
   };
 
-  try{
-    await html2pdf().set(opt).from(wrapper).save();
-  }catch(err){
-    console.error(err);
-    alert('Erro ao exportar PDF: ' + (err && err.message ? err.message : err));
-  }finally{
+  html2pdf().set(opt).from(wrapper).save().then(()=>{
     wrapper.remove();
-  }
-});
+  }).catch(err=>{
+    console.error(err);
+    alert('Erro ao exportar PDF: '+(err && err.message? err.message : err));
+    wrapper.remove();
+  });
+}
 
-/* example */
+document.getElementById('exportPDF').addEventListener('click', exportCurriculumAsPDF);
+
+/* ---------- utility: load example (quick preview) ---------- */
 function loadExample(){
   document.getElementById('nameInput').value = 'Ana Beatriz Costa';
   document.getElementById('roleInput').value = 'Coordenadora de Segurança do Trabalho';
@@ -617,21 +640,35 @@ function loadExample(){
   rebuildPreview();
 }
 
-/* init */
+/* ---------- init: listeners and defaults ---------- */
 ['nameInput','roleInput','phoneInput','emailInput','cityInput','siteInput','summaryInput','skillsInput'].forEach(id=>{
   const el = document.getElementById(id);
   if(el) el.addEventListener('input', () => rebuildPreview());
 });
 
+// start with experience and education sections to help users
 addSection('experience');
 addSection('education');
 
-// theme toggle (page-level only)
-document.getElementById('themeToggle').addEventListener('click', ()=> document.body.classList.toggle('dark'));
+// theme persistence: restore saved theme
+(function(){
+  try{
+    const t = localStorage.getItem('cv_theme');
+    if(t === 'dark') document.body.classList.add('dark');
+  }catch(e){/* ignore */}
+})();
 
+// theme toggle (page-level only)
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  document.body.classList.toggle('dark');
+  try{ localStorage.setItem('cv_theme', document.body.classList.contains('dark')? 'dark' : 'light'); }catch(e){}
+});
+
+// initial render
 rebuildPreview();
+
+// **Gerar exemplo automaticamente conforme solicitado**
 loadExample();
 </script>
-
 </body>
 </html>
